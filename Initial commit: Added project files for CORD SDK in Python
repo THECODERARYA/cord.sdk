@@ -1,0 +1,134 @@
+# cord_sdk/__init__.py
+
+# Import modules
+from .cord import CordSDK
+from .did import DIDModule
+from .chainspace import ChainspaceModule
+# cord_sdk/cord.py
+
+class CordSDK:
+    def __init__(self):
+        # Initialize connection to CORD
+        pass
+    
+    def make_cord_call(self, method, *args, **kwargs):
+        # Make a call to CORD
+        pass
+# cord_sdk/did.py
+
+class DIDModule:
+    def __init__(self, cord_sdk):
+        self.cord_sdk = cord_sdk
+    
+    def create_did(self, did_data):
+        # Create a DID
+        response = self.cord_sdk.make_cord_call('create_did', did_data)
+        return response
+    
+    def resolve_did(self, did):
+        # Resolve a DID
+        response = self.cord_sdk.make_cord_call('resolve_did', did)
+        return response
+    
+    def update_did(self, did, updated_data):
+        # Update a DID
+        response = self.cord_sdk.make_cord_call('update_did', did, updated_data)
+        return response
+# cord_sdk/chainspace.py
+
+class ChainspaceModule:
+    def __init__(self, cord_sdk):
+        self.cord_sdk = cord_sdk
+    
+    def create_transaction(self, transaction_data):
+        # Create a Chainspace transaction
+        response = self.cord_sdk.make_cord_call('create_transaction', transaction_data)
+        return response
+    
+    def submit_transaction(self, transaction):
+        # Submit a transaction to Chainspace network
+        response = self.cord_sdk.make_cord_call('submit_transaction', transaction)
+        return response
+# tests/__init__.py
+
+# No content needed
+# tests/test_did.py
+
+import unittest
+from cord_sdk import CordSDK, DIDModule
+
+class TestDIDModule(unittest.TestCase):
+    def setUp(self):
+        self.cord_sdk = CordSDK()
+        self.did_module = DIDModule(self.cord_sdk)
+    
+    def test_create_did(self):
+        did_data = {'name': 'John Doe', 'email': 'john@example.com'}
+        response = self.did_module.create_did(did_data)
+        self.assertTrue(response)  # Assuming response indicates success
+    
+    def test_resolve_did(self):
+        did = 'did:example:123456789'
+        response = self.did_module.resolve_did(did)
+        self.assertTrue(response)  # Assuming response contains resolved data
+    
+    def test_update_did(self):
+        did = 'did:example:123456789'
+        updated_data = {'name': 'Jane Doe'}
+        response = self.did_module.update_did(did, updated_data)
+        self.assertTrue(response)  # Assuming response indicates success
+
+if __name__ == '__main__':
+    unittest.main()
+# tests/test_chainspace.py
+
+import unittest
+from cord_sdk import CordSDK, ChainspaceModule
+
+class TestChainspaceModule(unittest.TestCase):
+    def setUp(self):
+        self.cord_sdk = CordSDK()
+        self.chainspace_module = ChainspaceModule(self.cord_sdk)
+    
+    def test_create_transaction(self):
+        transaction_data = {'from': 'Alice', 'to': 'Bob', 'amount': 100}
+        response = self.chainspace_module.create_transaction(transaction_data)
+        self.assertTrue(response)  # Assuming response contains created transaction
+    
+    def test_submit_transaction(self):
+        transaction = {'id': '123456789', 'from': 'Alice', 'to': 'Bob', 'amount': 100}
+        response = self.chainspace_module.submit_transaction(transaction)
+        self.assertTrue(response)  # Assuming response indicates success
+
+if __name__ == '__main__':
+    unittest.main()
+# demo/func_test.py
+
+from cord_sdk import CordSDK, DIDModule, ChainspaceModule
+
+def main():
+    cord_sdk = CordSDK()
+    did_module = DIDModule(cord_sdk)
+    chainspace_module = ChainspaceModule(cord_sdk)
+    
+    # Example usage
+    did_data = {'name': 'John Doe', 'email': 'john@example.com'}
+    created_did = did_module.create_did(did_data)
+    print("Created DID:", created_did)
+    
+    resolved_did = did_module.resolve_did(created_did)
+    print("Resolved DID:", resolved_did)
+    
+    updated_data = {'name': 'Jane Doe'}
+    updated_did = did_module.update_did(created_did, updated_data)
+    print("Updated DID:", updated_did)
+    
+    transaction_data = {'from': 'Alice', 'to': 'Bob', 'amount': 100}
+    created_transaction = chainspace_module.create_transaction(transaction_data)
+    print("Created Transaction:", created_transaction)
+    
+    submitted_transaction = chainspace_module.submit_transaction(created_transaction)
+    print("Submitted Transaction:", submitted_transaction)
+
+if __name__ == "__main__":
+    main()
